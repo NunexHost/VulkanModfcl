@@ -114,6 +114,7 @@ public class WorldRenderer {
         addOnAllChangedCallback(Queue.TransferQueue::trimCmdPool);
         addOnAllChangedCallback(Queue.FakeTransferQueue::trimCmdPool);
         addOnAllChangedCallback(Queue.GraphicsQueue::trimCmdPool);
+        addOnAllChangedCallback(()-> this.chunkQueue.trim(1024));
     }
 
     private void allocateIndirectBuffers() {
@@ -263,6 +264,7 @@ public class WorldRenderer {
         BlockPos blockpos = camera.getBlockPosition();
         RenderSection renderSection = this.sectionGrid.getSectionAtBlockPos(blockpos);
 
+        chunkTrim();
         if (renderSection == null) {
             boolean flag = blockpos.getY() > this.level.getMinBuildHeight();
             int j = flag ? this.level.getMaxBuildHeight() - 8 : this.level.getMinBuildHeight() + 8;
@@ -295,6 +297,15 @@ public class WorldRenderer {
             this.chunkQueue.add(renderSection);
         }
 
+    }
+
+    private void chunkTrim() {
+        final int gridWidth = (sectionGrid.gridWidth-1)>>1;
+        if(this.lastViewDistance!=gridWidth)
+        {
+            this.chunkQueue.trim(gridWidth*(gridWidth>>2));
+//            priorGridWidth=gridWidth;
+        }
     }
 
     private void initUpdate() {
@@ -719,9 +730,9 @@ public class WorldRenderer {
     public String getChunkStatistics() {
         int i = this.sectionGrid.chunks.length;
 //        int j = this.sectionsInFrustum.size();
-        int j = this.chunkQueue.size();
         String tasksInfo = this.taskDispatcher == null ? "null" : this.taskDispatcher.getStats();
-        return String.format("Chunks: %d(%d)/%d D: %d, %s", this.nonEmptyChunks, j, i, this.lastViewDistance, tasksInfo);
+        int j = this.chunkQueue.size();
+        return String.format("Chunks: %d(%d)/%d D: %d, %s, %d", this.nonEmptyChunks, j, i, this.lastViewDistance, tasksInfo, this.chunkQueue.capacity());
     }
 
     public void cleanUp() {
