@@ -112,6 +112,8 @@ public class WorldRenderer {
             });
         }
         addOnAllChangedCallback(Vulkan::waitIdle);
+        addOnAllChangedCallback(Queue.TransferQueue::trimCmdPool);
+        addOnAllChangedCallback(Queue.FakeTransferQueue::trimCmdPool);
         addOnAllChangedCallback(Queue.GraphicsQueue::trimCmdPool);
     }
 
