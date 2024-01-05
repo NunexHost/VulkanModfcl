@@ -40,6 +40,7 @@
     "render.entity.EntityRendererM",
     "render.model.ModelPartCubeM",
     "render.model.ModelPartM",
+    "render.particle.SingleQuadParticleM",
     "render.vertex.BufferBuilderM",
     "render.vertex.FaceBakeryM",
     "render.vertex.IndexTypeMixin",
