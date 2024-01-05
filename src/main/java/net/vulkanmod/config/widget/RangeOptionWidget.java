@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class RangeOptionWidget extends OptionWidget {
     protected double value;
-    private RangeOption option;
+    private final RangeOption option;
 
     private boolean focused;
 

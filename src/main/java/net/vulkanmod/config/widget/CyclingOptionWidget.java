@@ -10,10 +10,10 @@ import net.vulkanmod.config.CyclingOption;
 import org.joml.Matrix4f;
 
 public class CyclingOptionWidget extends OptionWidget {
-    CyclingOption<?> option;
+    final CyclingOption<?> option;
 
-    private Button leftButton;
-    private Button rightButton;
+    private final Button leftButton;
+    private final Button rightButton;
 
     private boolean focused;
 
@@ -79,10 +79,10 @@ public class CyclingOptionWidget extends OptionWidget {
     }
 
     class Button {
-        int x;
-        int width;
+        final int x;
+        final int width;
         boolean active;
-        int direction;
+        final int direction;
 
         Button(int x, int width, int direction) {
             this.x = x;

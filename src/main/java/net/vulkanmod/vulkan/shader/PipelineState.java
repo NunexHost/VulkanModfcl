@@ -18,7 +18,7 @@ public class PipelineState {
     public static final LogicOpState DEFAULT_LOGICOP_STATE = new LogicOpState(false, 0);
     public static final ColorMask DEFAULT_COLORMASK = new ColorMask(true, true, true, true);
 
-    public static PipelineState.BlendInfo blendInfo = PipelineState.defaultBlendInfo();
+    public static final PipelineState.BlendInfo blendInfo = PipelineState.defaultBlendInfo();
     public static PipelineState.BlendState currentBlendState;
     public static PipelineState.DepthState currentDepthState = PipelineState.DEFAULT_DEPTH_STATE;
     public static PipelineState.LogicOpState currentLogicOpState = PipelineState.DEFAULT_LOGICOP_STATE;

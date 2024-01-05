@@ -10,6 +10,7 @@ import net.vulkanmod.vulkan.texture.VulkanImage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(AbstractTexture.class)
 public abstract class MAbstractTexture implements VAbstractTextureI {
@@ -19,6 +20,7 @@ public abstract class MAbstractTexture implements VAbstractTextureI {
 
     @Shadow public abstract int getId();
 
+    @Unique
     protected VulkanImage vulkanImage;
 
     /**

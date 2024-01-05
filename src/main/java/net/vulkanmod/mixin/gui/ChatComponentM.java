@@ -14,10 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.vulkanmod.render.gui.GuiBatchRenderer;
 import org.joml.Matrix4f;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +52,7 @@ public abstract class ChatComponentM {
 
     @Shadow protected abstract double screenToChatY(double d);
 
+    @Unique
     private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation("textures/gui/chat_tags.png");
 
     /**
@@ -235,11 +233,13 @@ public abstract class ChatComponentM {
 //        GuiBatchRenderer.blit(mat4f, i, k, icon.u, icon.v, icon.width, icon.height, 32, 32);
 //    }
 
+    @Unique
     private void drawTagIcon(GuiGraphics guiGraphics, int i, int j, GuiMessageTag.Icon icon) {
         int k = j - icon.height - 1;
         icon.draw(guiGraphics, i, k);
     }
 
+    @Unique
     private static double getTimeFactor(int i) {
         double d = (double)i / 200.0;
         d = 1.0 - d;

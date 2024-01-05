@@ -18,7 +18,7 @@ public class CubeModel {
     public float maxZ;
 
     Vector3f[] vertices;
-    Vector3f[] transformed = new Vector3f[8];
+    final Vector3f[] transformed = new Vector3f[8];
 
     public void setVertices(int i, int j, float f, float g, float h, float k, float l, float m, float n, float o, float p, boolean bl, float q, float r, Set<Direction> set) {
         this.minX = f;

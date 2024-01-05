@@ -27,8 +27,8 @@ public class VOptionList extends AbstractWidget {
     float scrollAmount = 0.0f;
     boolean isDragging = false;
 
-    int headerHeight;
-    int itemHeight;
+    final int headerHeight;
+    final int itemHeight;
 
     GuiEventListener focused;
 

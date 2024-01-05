@@ -171,8 +171,8 @@ public class Profiler2 {
             count++;
         }
 
-        public float computeAvg() {
-            return value /= count * 1000.0f;
+        public void computeAvg() {
+            value /= count * 1000.0f;
         }
 
         public float getValue() { return value; }
@@ -190,7 +190,7 @@ public class Profiler2 {
 //        LinkedList<Node> stack = new LinkedList<>();
 //        LinkedList<Entry> values = new LinkedList<>();
 //        Object2FloatMap<String> valueMap;
-        Node mainNode;
+final Node mainNode;
         Node currentNode;
 
         byte level = 0;
@@ -261,12 +261,12 @@ public class Profiler2 {
 
     private static class Node {
 //        byte level, index;
-        String name;
+final String name;
         float value;
-        long start;
+        final long start;
 
-        Node parent;
-        LinkedList<Node> children = new LinkedList<>();
+        final Node parent;
+        final LinkedList<Node> children = new LinkedList<>();
 
 //        public Node(@Nullable Node parent, String name, float value) {
 //            this.parent = parent;

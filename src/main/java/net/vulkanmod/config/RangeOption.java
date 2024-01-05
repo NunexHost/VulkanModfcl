@@ -11,11 +11,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class RangeOption extends Option<Integer> {
-    int min;
-    int max;
-    int step;
+    final int min;
+    final int max;
+    final int step;
 
-    Function<Integer, String> translator;
+    final Function<Integer, String> translator;
 
     public RangeOption(String name, int min, int max, int step, Function<Integer, String> translator, Consumer<Integer> setter, Supplier<Integer> getter) {
         super(name, setter, getter);

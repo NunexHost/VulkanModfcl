@@ -4,7 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.vulkanmod.config.SwitchOption;
 
 public class SwitchOptionWidget extends OptionWidget {
-    SwitchOption option;
+    final SwitchOption option;
 
     private boolean focused;
 

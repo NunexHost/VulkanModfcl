@@ -14,7 +14,7 @@ public class ImageDescriptor implements Descriptor {
     public final String name;
 
     public final boolean isStorageImage;
-    public boolean useSampler;
+    public final boolean useSampler;
     public boolean isReadOnlyLayout;
     private int layout;
     private int mipLevel = -1;

@@ -14,7 +14,7 @@ public class UniformParser {
     private final GlslConverter converterInstance;
     private final StageUniforms[] stageUniforms = new StageUniforms[GlslConverter.ShaderStage.values().length];
     private StageUniforms currentUniforms;
-    List<Uniform> globalUniforms = new ArrayList<>();
+    final List<Uniform> globalUniforms = new ArrayList<>();
 
     private String type;
     private String name;
@@ -30,8 +30,8 @@ public class UniformParser {
         }
     }
 
-    public boolean parseToken(String token) {
-        if(token.matches("uniform")) return false;
+    public void parseToken(String token) {
+        if(token.matches("uniform")) return;
 
         if (this.type == null) {
             this.type = token;
@@ -54,10 +54,8 @@ public class UniformParser {
             }
 
             this.resetSate();
-            return true;
         }
 
-        return false;
     }
 
     public void setCurrentUniforms(GlslConverter.ShaderStage shaderStage) {
@@ -142,7 +140,7 @@ public class UniformParser {
     public record Uniform(int binding, int stage, String type, String name) {}
 
     private static class StageUniforms {
-        List<Uniform> samplers = new ArrayList<>();
+        final List<Uniform> samplers = new ArrayList<>();
     }
 
     enum State {

@@ -121,7 +121,7 @@ public class CommandPool {
 
     public class CommandBuffer {
         VkCommandBuffer handle;
-        long fence;
+        final long fence;
         boolean submitted;
         boolean recording;
 

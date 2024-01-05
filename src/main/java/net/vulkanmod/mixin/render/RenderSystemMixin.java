@@ -30,6 +30,7 @@ public abstract class RenderSystemMixin {
 
     @Shadow private static Matrix4f projectionMatrix;
     @Shadow private static Matrix4f savedProjectionMatrix;
+    @Final
     @Shadow private static PoseStack modelViewStack;
     @Shadow private static Matrix4f modelViewMatrix;
     @Shadow private static Matrix4f textureMatrix;

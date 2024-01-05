@@ -199,11 +199,12 @@ public class Framebuffer {
 
     public static class Builder {
         final int width, height;
-        int format, depthFormat;
+        int format;
+        final int depthFormat;
 
 //        int colorAttachments;
-        boolean hasColorAttachment;
-        boolean hasDepthAttachment;
+final boolean hasColorAttachment;
+        final boolean hasDepthAttachment;
 
         boolean linearFiltering;
         boolean depthLinearFiltering;

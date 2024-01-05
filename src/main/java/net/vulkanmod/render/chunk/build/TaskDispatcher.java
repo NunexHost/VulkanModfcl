@@ -14,7 +14,7 @@ import java.util.EnumMap;
 import java.util.Queue;
 
 public class TaskDispatcher {
-    private int highPriorityQuota = 2;
+    private final int highPriorityQuota = 2;
 
     private final Queue<Runnable> toUpload = Queues.newLinkedBlockingDeque();
     public final ThreadBuilderPack fixedBuffers;

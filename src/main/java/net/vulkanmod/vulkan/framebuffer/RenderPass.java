@@ -12,12 +12,12 @@ import static org.lwjgl.vulkan.KHRSwapchain.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 import static org.lwjgl.vulkan.VK10.*;
 
 public class RenderPass {
-    Framebuffer framebuffer;
+    final Framebuffer framebuffer;
     long id;
 
     final int attachmentCount;
-    AttachmentInfo colorAttachmentInfo;
-    AttachmentInfo depthAttachmentInfo;
+    final AttachmentInfo colorAttachmentInfo;
+    final AttachmentInfo depthAttachmentInfo;
 
     public RenderPass(Framebuffer framebuffer, AttachmentInfo colorAttachmentInfo, AttachmentInfo depthAttachmentInfo) {
         this.framebuffer = framebuffer;
@@ -288,7 +288,7 @@ public class RenderPass {
     }
 
     public static class Builder {
-        Framebuffer framebuffer;
+        final Framebuffer framebuffer;
         AttachmentInfo colorAttachmentInfo;
         AttachmentInfo depthAttachmentInfo;
 

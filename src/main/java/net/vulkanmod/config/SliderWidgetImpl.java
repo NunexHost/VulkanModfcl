@@ -4,7 +4,7 @@ import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.Component;
 
 public class SliderWidgetImpl extends AbstractSliderButton {
-    private RangeOption option;
+    private final RangeOption option;
 
     public SliderWidgetImpl(RangeOption option, int x, int y, int width, int height, Component text, double value) {
         super(x, y, width, height, text, value);

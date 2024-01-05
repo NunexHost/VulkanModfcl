@@ -7,8 +7,8 @@ import java.util.List;
 
 public abstract class AlignedStruct {
 
-    protected List<Field> fields = new ArrayList<>();
-    protected int size;
+    protected final List<Field> fields = new ArrayList<>();
+    protected final int size;
 
     protected AlignedStruct(List<Field.FieldInfo> infoList, int size) {
         this.size = size;

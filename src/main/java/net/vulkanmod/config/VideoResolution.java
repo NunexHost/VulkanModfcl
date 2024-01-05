@@ -17,11 +17,11 @@ public class VideoResolution {
     private static VideoResolution[] videoResolutions;
     private static final int activePlat = getSupportedPlat();
 
-    int width;
-    int height;
+    final int width;
+    final int height;
     int refreshRate;
 
-    private List<VideoMode> videoModes;
+    private final List<VideoMode> videoModes;
 
     public VideoResolution(int width, int height) {
         this.width = width;

@@ -26,8 +26,8 @@ public class ProfilerOverlay {
         INSTANCE = new ProfilerOverlay(minecraft);
     }
 
-    Minecraft minecraft;
-    Font font;
+    final Minecraft minecraft;
+    final Font font;
 
     public ProfilerOverlay(Minecraft minecraft) {
         this.minecraft = minecraft;

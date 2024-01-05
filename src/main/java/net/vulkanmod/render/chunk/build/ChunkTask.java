@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.client.renderer.chunk.VisibilitySet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.GrassBlock;
-import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,14 +37,14 @@ public abstract class ChunkTask {
     private static TaskDispatcher taskDispatcher;
 
     public static final boolean bench = false;
-    public static AtomicInteger totalBuildTime = new AtomicInteger(0);
-    public static AtomicInteger buildCount = new AtomicInteger(0);
+    public static final AtomicInteger totalBuildTime = new AtomicInteger(0);
+    public static final AtomicInteger buildCount = new AtomicInteger(0);
 
     public static BuildTask createBuildTask(RenderSection renderSection, RenderChunkRegion renderChunkRegion, boolean highPriority) {
         return new BuildTask(renderSection, renderChunkRegion, highPriority);
     }
 
-    protected AtomicBoolean cancelled = new AtomicBoolean(false);
+    protected final AtomicBoolean cancelled = new AtomicBoolean(false);
     protected final RenderSection renderSection;
     public boolean highPriority = false;
 
@@ -56,7 +54,7 @@ public abstract class ChunkTask {
 
     public abstract String name();
 
-    public abstract CompletableFuture<Result> doTask(ThreadBuilderPack builderPack);
+    public abstract void doTask(ThreadBuilderPack builderPack);
 
     public void cancel() {
         this.cancelled.set(true);
@@ -72,10 +70,6 @@ public abstract class ChunkTask {
         @Nullable
         protected RenderChunkRegion region;
 
-        //debug
-        private float buildTime;
-        private boolean submitted = false;
-
         public BuildTask(RenderSection renderSection, RenderChunkRegion renderChunkRegion, boolean highPriority) {
             super(renderSection);
             this.region = renderChunkRegion;
@@ -89,20 +83,20 @@ public abstract class ChunkTask {
             return "rend_chk_rebuild";
         }
 
-        public CompletableFuture<Result> doTask(ThreadBuilderPack chunkBufferBuilderPack) {
+        public void doTask(ThreadBuilderPack chunkBufferBuilderPack) {
             //debug
-            this.submitted = true;
+            boolean submitted = true;
             long startTime = System.nanoTime();
 
             if (this.cancelled.get()) {
-                return CompletableFuture.completedFuture(Result.CANCELLED);
+                CompletableFuture.completedFuture(Result.CANCELLED);
             } else if (!this.renderSection.hasXYNeighbours()) {
                 this.region = null;
                 this.renderSection.setDirty(false);
                 this.cancelled.set(true);
-                return CompletableFuture.completedFuture(Result.CANCELLED);
+                CompletableFuture.completedFuture(Result.CANCELLED);
             } else if (this.cancelled.get()) {
-                return CompletableFuture.completedFuture(Result.CANCELLED);
+                CompletableFuture.completedFuture(Result.CANCELLED);
             } else {
                 Vec3 vec3 = WorldRenderer.getCameraPos();
                 float f = (float)vec3.x;
@@ -114,7 +108,7 @@ public abstract class ChunkTask {
 
                 if (this.cancelled.get()) {
                     compileResults.renderedLayers.values().forEach(UploadBuffer::release);
-                    return CompletableFuture.completedFuture(Result.CANCELLED);
+                    CompletableFuture.completedFuture(Result.CANCELLED);
                 } else {
                     CompiledSection compiledChunk = new CompiledSection();
                     compiledChunk.visibilitySet = compileResults.visibilitySet;
@@ -131,14 +125,15 @@ public abstract class ChunkTask {
                     this.renderSection.setVisibility(((VisibilitySetExtended)compiledChunk.visibilitySet).getVisibility());
                     this.renderSection.setCompletelyEmpty(compiledChunk.isCompletelyEmpty);
 
-                    this.buildTime = (System.nanoTime() - startTime) * 0.000001f;
+                    //debug
+                    float buildTime = (System.nanoTime() - startTime) * 0.000001f;
 
                     if(bench) {
-                        totalBuildTime.addAndGet((int)buildTime);
+                        totalBuildTime.addAndGet((int) buildTime);
                         buildCount.addAndGet(1);
                     }
 
-                    return CompletableFuture.completedFuture(Result.SUCCESSFUL);
+                    CompletableFuture.completedFuture(Result.SUCCESSFUL);
                 }
             }
         }
@@ -290,7 +285,7 @@ public abstract class ChunkTask {
     }
 
     public static class SortTransparencyTask extends ChunkTask {
-        CompiledSection compiledSection;
+        final CompiledSection compiledSection;
 
         public SortTransparencyTask(RenderSection renderSection) {
             super(renderSection);
@@ -301,12 +296,12 @@ public abstract class ChunkTask {
             return "rend_chk_sort";
         }
 
-        public CompletableFuture<Result> doTask(ThreadBuilderPack builderPack) {
+        public void doTask(ThreadBuilderPack builderPack) {
             if (this.cancelled.get()) {
-                return CompletableFuture.completedFuture(Result.CANCELLED);
+                CompletableFuture.completedFuture(Result.CANCELLED);
             } else if (!renderSection.hasXYNeighbours()) {
                 this.cancelled.set(true);
-                return CompletableFuture.completedFuture(Result.CANCELLED);
+                CompletableFuture.completedFuture(Result.CANCELLED);
             } else {
                 Vec3 vec3 = WorldRenderer.getCameraPos();
                 float f = (float)vec3.x;
@@ -322,17 +317,17 @@ public abstract class ChunkTask {
                     this.compiledSection.transparencyState = bufferbuilder.getSortState();
                     TerrainBufferBuilder.RenderedBuffer renderedBuffer = bufferbuilder.end();
                     if (this.cancelled.get()) {
-                        return CompletableFuture.completedFuture(Result.CANCELLED);
+                        CompletableFuture.completedFuture(Result.CANCELLED);
                     } else {
 
                         UploadBuffer uploadBuffer = new UploadBuffer(renderedBuffer);
                         taskDispatcher.scheduleUploadChunkLayer(renderSection, TRANSLUCENT, uploadBuffer);
                         renderedBuffer.release();
-                        return CompletableFuture.completedFuture(Result.SUCCESSFUL);
+                        CompletableFuture.completedFuture(Result.SUCCESSFUL);
 
                     }
                 } else {
-                    return CompletableFuture.completedFuture(Result.CANCELLED);
+                    CompletableFuture.completedFuture(Result.CANCELLED);
                 }
             }
         }
@@ -340,6 +335,6 @@ public abstract class ChunkTask {
     
     public enum Result {
         CANCELLED,
-        SUCCESSFUL;
+        SUCCESSFUL
     }
 }

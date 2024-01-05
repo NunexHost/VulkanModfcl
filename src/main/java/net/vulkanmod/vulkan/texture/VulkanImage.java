@@ -19,7 +19,7 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.vulkan.VK10.*;
 
 public class VulkanImage {
-    public static int DefaultFormat = VK_FORMAT_R8G8B8A8_UNORM;
+    public static final int DefaultFormat = VK_FORMAT_R8G8B8A8_UNORM;
 
     private static final VkDevice DEVICE = Vulkan.getDevice();
 

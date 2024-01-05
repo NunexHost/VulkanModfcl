@@ -31,7 +31,7 @@ public class AreaUploadManager {
 
 //    LongOpenHashSet dstBuffers = new LongOpenHashSet();
 
-    Long2ObjectArrayMap<ObjectArrayFIFOQueue<SubCopyCommand>> subCopyCommands = new Long2ObjectArrayMap<>();
+    final Long2ObjectArrayMap<ObjectArrayFIFOQueue<SubCopyCommand>> subCopyCommands = new Long2ObjectArrayMap<>();
 
     int currentFrame;
 

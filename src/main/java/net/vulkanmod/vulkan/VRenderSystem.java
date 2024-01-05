@@ -31,23 +31,23 @@ public abstract class VRenderSystem {
     public static boolean cull = true;
 
     public static final float clearDepth = 1.0f;
-    public static FloatBuffer clearColor = MemoryUtil.memCallocFloat(4);
+    public static final FloatBuffer clearColor = MemoryUtil.memCallocFloat(4);
 
-    public static MappedBuffer modelViewMatrix = MappedBuffer.getMappedBuffer(16 * 4);
-    public static MappedBuffer projectionMatrix = MappedBuffer.getMappedBuffer(16 * 4);
-    public static MappedBuffer TextureMatrix = MappedBuffer.getMappedBuffer(16 * 4);
-    public static MappedBuffer MVP = MappedBuffer.getMappedBuffer(16 * 4);
+    public static final MappedBuffer modelViewMatrix = MappedBuffer.getMappedBuffer(16 * 4);
+    public static final MappedBuffer projectionMatrix = MappedBuffer.getMappedBuffer(16 * 4);
+    public static final MappedBuffer TextureMatrix = MappedBuffer.getMappedBuffer(16 * 4);
+    public static final MappedBuffer MVP = MappedBuffer.getMappedBuffer(16 * 4);
 
-    public static MappedBuffer ChunkOffset = MappedBuffer.getMappedBuffer(3 * 4);
-    public static MappedBuffer lightDirection0 = MappedBuffer.getMappedBuffer(3 * 4);
-    public static MappedBuffer lightDirection1 = MappedBuffer.getMappedBuffer(3 * 4);
+    public static final MappedBuffer ChunkOffset = MappedBuffer.getMappedBuffer(3 * 4);
+    public static final MappedBuffer lightDirection0 = MappedBuffer.getMappedBuffer(3 * 4);
+    public static final MappedBuffer lightDirection1 = MappedBuffer.getMappedBuffer(3 * 4);
 
-    public static MappedBuffer shaderColor = MappedBuffer.getMappedBuffer(4 * 4);
-    public static MappedBuffer shaderFogColor = MappedBuffer.getMappedBuffer(4 * 4);
+    public static final MappedBuffer shaderColor = MappedBuffer.getMappedBuffer(4 * 4);
+    public static final MappedBuffer shaderFogColor = MappedBuffer.getMappedBuffer(4 * 4);
 
-    public static MappedBuffer screenSize = MappedBuffer.getMappedBuffer(2 * 4);
+    public static final MappedBuffer screenSize = MappedBuffer.getMappedBuffer(2 * 4);
 
-    public static float alphaCutout = 0.0f;
+    public static final float alphaCutout = 0.0f;
 
     private static final float[] depthBias = new float[2];
 

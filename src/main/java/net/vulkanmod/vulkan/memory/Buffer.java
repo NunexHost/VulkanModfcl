@@ -10,8 +10,8 @@ public abstract class Buffer {
     protected int usedBytes;
     protected int offset;
 
-    protected MemoryType type;
-    protected int usage;
+    protected final MemoryType type;
+    protected final int usage;
     protected PointerBuffer data;
 
     protected Buffer(int usage, MemoryType type) {

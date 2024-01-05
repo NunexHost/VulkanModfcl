@@ -12,7 +12,7 @@ import static org.lwjgl.vulkan.VK10.*;
 
 public class DefaultMainPass implements MainPass {
 
-    public static DefaultMainPass PASS = new DefaultMainPass();
+    public static final DefaultMainPass PASS = new DefaultMainPass();
 
     @Override
     public void begin(VkCommandBuffer commandBuffer, MemoryStack stack) {

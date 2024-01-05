@@ -6,13 +6,13 @@ import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import java.util.*;
 
 public class Profiler {
-    private static Profiler defaultProfiler = new Profiler("default");
+    private static final Profiler defaultProfiler = new Profiler("default");
     private static Profiler currentProfiler;
-    private static Map<String, Profiler> activeProfilers = new HashMap<>();
+    private static final Map<String, Profiler> activeProfilers = new HashMap<>();
 
     private final String name;
     private Entries entries =  new Entries();
-    private LinkedList<Entries> entriesStack = new LinkedList<>();
+    private final LinkedList<Entries> entriesStack = new LinkedList<>();
     private static final float conversion = 1000.0f;
     private static final float invConversion = 1 / conversion;
     private long startTime;
@@ -89,8 +89,8 @@ public class Profiler {
     public static void testOwnProfilerTime() {}
 
     private class Entries {
-        List<Entry> values = new ArrayList<>();
-        List<Entry> milestones = new ArrayList<>();
+        final List<Entry> values = new ArrayList<>();
+        final List<Entry> milestones = new ArrayList<>();
         Object2FloatMap<String> valueMap;
         float deltaTime;
 
@@ -132,8 +132,8 @@ public class Profiler {
     }
 
     private static class Entry {
-        String name;
-        float value;
+        final String name;
+        final float value;
 
         public Entry(String name, float value) {
             this.name = name;

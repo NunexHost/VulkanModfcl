@@ -15,9 +15,9 @@ import java.util.stream.IntStream;
 import static org.lwjgl.vulkan.KHRSurface.vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
 
 public class Options {
-    static net.minecraft.client.Options minecraftOptions = Minecraft.getInstance().options;
-    static Config config = Initializer.CONFIG;
-    static Window window = Minecraft.getInstance().getWindow();
+    static final net.minecraft.client.Options minecraftOptions = Minecraft.getInstance().options;
+    static final Config config = Initializer.CONFIG;
+    static final Window window = Minecraft.getInstance().getWindow();
     public static boolean fullscreenDirty = false;
     public static final boolean drawIndirectSupported = DeviceManager.deviceInfo.isDrawIndirectSupported();
     public static final int minImageCount;

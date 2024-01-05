@@ -7,7 +7,7 @@ import java.nio.ShortBuffer;
 
 public class AutoIndexBuffer {
     int vertexCount;
-    DrawType drawType;
+    final DrawType drawType;
     IndexBuffer indexBuffer;
 
     public AutoIndexBuffer(int vertexCount, DrawType type) {

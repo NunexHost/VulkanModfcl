@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 public abstract class Field {
     protected Supplier<MappedBuffer> values;
 
-    FieldInfo fieldInfo;
-    protected long offset;
-    protected int size;
+    final FieldInfo fieldInfo;
+    protected final long offset;
+    protected final int size;
 
     Field(FieldInfo fieldInfo) {
         this.fieldInfo = fieldInfo;

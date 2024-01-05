@@ -16,10 +16,10 @@ import java.util.function.Consumer;
 import static net.vulkanmod.config.widget.OptionWidget.WIDGETS_TEXTURE;
 
 public class CustomButtonWidget extends AbstractButton {
-    int x;
-    int y;
+    final int x;
+    final int y;
     boolean selected = false;
-    Consumer<CustomButtonWidget> onPress;
+    final Consumer<CustomButtonWidget> onPress;
 
     public CustomButtonWidget(int x, int y, int width, int height, Component message, Consumer<CustomButtonWidget> onPress) {
         super(x, y, width, height, message);

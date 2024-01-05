@@ -28,19 +28,19 @@ public abstract class OptionWidget
         implements Renderable, LayoutElement, GuiEventListener, NarratableEntry {
 
     public static final ResourceLocation WIDGETS_TEXTURE = new ResourceLocation("textures/gui/widgets.png");
-    protected int width;
-    protected int height;
-    public int x;
+    protected final int width;
+    protected final int height;
+    public final int x;
     public int y;
-    public int controlX;
-    public int controlWidth;
-    private Component name;
+    public final int controlX;
+    public final int controlWidth;
+    private final Component name;
     protected Component displayedValue;
     protected boolean hovered;
     protected boolean controlHovered;
-    public boolean active = true;
-    public boolean visible = true;
-    protected float alpha = 1.0f;
+    public final boolean active = true;
+    public final boolean visible = true;
+    protected final float alpha = 1.0f;
     private boolean focused;
 
     public OptionWidget(int x, int y, int width, int height, Component name) {

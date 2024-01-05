@@ -27,8 +27,6 @@ public abstract class TerrainShaderManager {
     static GraphicsPipeline terrainShaderEarlyZ;
     static GraphicsPipeline terrainShader;
 
-    private static Function<TerrainRenderType, GraphicsPipeline> shaderGetter;
-
     public static void init() {
         setTerrainVertexFormat(CustomVertexFormat.COMPRESSED_TERRAIN);
         createBasicPipelines();
@@ -66,7 +64,6 @@ public abstract class TerrainShaderManager {
     }
 
     public static void setShaderGetter(Function<TerrainRenderType, GraphicsPipeline> consumer) {
-        shaderGetter = consumer;
     }
 
     public static void destroyPipelines() {

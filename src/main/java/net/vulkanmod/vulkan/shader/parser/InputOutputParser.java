@@ -12,12 +12,12 @@ public class InputOutputParser {
     private final GlslConverter converterInstance;
     private final VertexFormat vertexFormat;
 
-    private AttributeSet vertInAttributes = new AttributeSet();
-    private AttributeSet vertOutAttributes = new AttributeSet();
+    private final AttributeSet vertInAttributes = new AttributeSet();
+    private final AttributeSet vertOutAttributes = new AttributeSet();
 
     private GlslConverter.ShaderStage shaderStage;
 
-    private int currentLocation = 0;
+    private final int currentLocation = 0;
     private String ioType;
     private String type;
     private String name;
@@ -27,7 +27,7 @@ public class InputOutputParser {
         this.vertexFormat = vertexFormat;
     }
 
-    public boolean parseToken(String token) {
+    public void parseToken(String token) {
 
         if (this.ioType == null)
             this.ioType = token;
@@ -56,10 +56,8 @@ public class InputOutputParser {
                 }
             }
             this.resetState();
-            return true;
         }
 
-        return false;
     }
 
     private void resetState() {
@@ -106,7 +104,7 @@ public class InputOutputParser {
     public record Attribute(int location, String type, String name) {}
 
     static class AttributeSet {
-        List<Attribute> attributes = new ObjectArrayList<>();
+        final List<Attribute> attributes = new ObjectArrayList<>();
         int currentLocation = 0;
 
         void add(String type, String name) {

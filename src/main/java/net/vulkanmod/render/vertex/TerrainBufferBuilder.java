@@ -48,7 +48,7 @@ public class TerrainBufferBuilder implements VertexConsumer {
 	protected long bufferPtr;
 //    private long ptr;
 
-	protected VertexBuilder vertexBuilder;
+	protected final VertexBuilder vertexBuilder;
 
 	public TerrainBufferBuilder(int i) {
 		this.buffer = MemoryTracker.create(i * 6);

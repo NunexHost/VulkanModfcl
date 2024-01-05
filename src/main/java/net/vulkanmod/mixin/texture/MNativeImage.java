@@ -7,10 +7,7 @@ import net.vulkanmod.vulkan.texture.VTextureSelector;
 import net.vulkanmod.vulkan.texture.VulkanImage;
 import net.vulkanmod.vulkan.util.ColorUtil;
 import org.lwjgl.system.MemoryUtil;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,6 +18,7 @@ import java.nio.ByteBuffer;
 public abstract class MNativeImage {
 
     @Shadow private long pixels;
+    @Final
     @Shadow private long size;
 
     @Shadow public abstract void close();
@@ -39,6 +37,7 @@ public abstract class MNativeImage {
 
     @Shadow public abstract int getPixelRGBA(int i, int j);
 
+    @Unique
     private ByteBuffer buffer;
 
     @Inject(method = "<init>(Lcom/mojang/blaze3d/platform/NativeImage$Format;IIZ)V", at = @At("RETURN"))

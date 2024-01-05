@@ -95,31 +95,28 @@ public class GuiBatchRenderer {
 
     }
 
-    public static int drawTextShadowed(Font font, MultiBufferSource bufferSource, PoseStack poseStack, FormattedCharSequence charSequence, float x, float y, int intensity) {
-        return drawInternal(font, bufferSource, charSequence, x, y, intensity, poseStack.last().pose(), true);
+    public static void drawTextShadowed(Font font, MultiBufferSource bufferSource, PoseStack poseStack, FormattedCharSequence charSequence, float x, float y, int intensity) {
+        drawInternal(font, bufferSource, charSequence, x, y, intensity, poseStack.last().pose(), true);
     }
 
-    public static int drawTextShadowed(Font font, MultiBufferSource bufferSource, Matrix4f matrix4f, FormattedCharSequence charSequence, float x, float y, int intensity) {
-        return drawInternal(font, bufferSource, charSequence, x, y, intensity, matrix4f, true);
+    public static void drawTextShadowed(Font font, MultiBufferSource bufferSource, Matrix4f matrix4f, FormattedCharSequence charSequence, float x, float y, int intensity) {
+        drawInternal(font, bufferSource, charSequence, x, y, intensity, matrix4f, true);
     }
 
-    public static int drawString(Font font, MultiBufferSource bufferSource, PoseStack poseStack, String string, float x, float y, int intensity) {
-        return drawInternal(font, bufferSource, string, x, y, intensity, poseStack.last().pose(), false, font.isBidirectional());
+    public static void drawString(Font font, MultiBufferSource bufferSource, PoseStack poseStack, String string, float x, float y, int intensity) {
+        drawInternal(font, bufferSource, string, x, y, intensity, poseStack.last().pose(), false, font.isBidirectional());
     }
 
-    private static int drawInternal(Font font, MultiBufferSource bufferSource, FormattedCharSequence formattedCharSequence, float x, float y, int intensity, Matrix4f matrix4f, boolean shadow) {
+    private static void drawInternal(Font font, MultiBufferSource bufferSource, FormattedCharSequence formattedCharSequence, float x, float y, int intensity, Matrix4f matrix4f, boolean shadow) {
         int j = font.drawInBatch(formattedCharSequence, x, y, intensity, shadow, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
-        return j;
     }
 
-    private static int drawInternal(Font font, MultiBufferSource bufferSource, String string, float f, float g, int i, Matrix4f matrix4f, boolean bl, boolean bl2) {
+    private static void drawInternal(Font font, MultiBufferSource bufferSource, String string, float f, float g, int i, Matrix4f matrix4f, boolean bl, boolean bl2) {
         if (string == null) {
-            return 0;
         } else {
             int i1 = font.drawInBatch(string, f, g, i, bl, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, 15728880, bl2);
 
-            return i1;
         }
     }
 

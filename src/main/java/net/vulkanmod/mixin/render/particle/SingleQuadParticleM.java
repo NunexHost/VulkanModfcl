@@ -16,10 +16,7 @@ import net.vulkanmod.render.chunk.WorldRenderer;
 import net.vulkanmod.vulkan.util.ColorUtil;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 
 @Mixin(SingleQuadParticle.class)
 public abstract class SingleQuadParticleM extends Particle {
@@ -94,6 +91,7 @@ public abstract class SingleQuadParticleM extends Particle {
         return this.level.hasChunkAt(blockPos) ? LevelRenderer.getLightColor(this.level, blockPos) : 0;
     }
 
+    @Unique
     private boolean cull(WorldRenderer worldRenderer, float x, float y, float z) {
         RenderSection section = worldRenderer.getSectionGrid().getSectionAtBlockPos((int) x, (int) y, (int) z);
         return section != null && section.getLastFrame() != worldRenderer.getLastFrame();
