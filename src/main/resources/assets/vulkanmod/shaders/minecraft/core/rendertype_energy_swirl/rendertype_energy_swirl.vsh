@@ -17,7 +17,7 @@ layout(location = 2) out vec2 texCoord0;
 void main() {
     gl_Position = MVP * vec4(Position, 1.0);
 
-    vertexDistance = length((ModelViewMat * vec4(Position, 1.0)).xyz);
+    //vertexDistance = length((ModelViewMat * vec4(Position, 1.0)).xyz);
     vertexColor = Color;
     texCoord0 = (TextureMat * vec4(UV0, 0.0, 1.0)).xy;
 }

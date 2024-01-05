@@ -29,7 +29,7 @@ layout(location = 0) out vec4 fragColor;
 
 void main() {
     vec4 color = texture(Sampler0, texCoord0);
-    if (color.a < 0.1) {
+    if (color.a < 0.5) {
         discard;
     }
     color *= vertexColor * ColorModulator;
@@ -61,7 +61,7 @@ out vec4 fragColor;
 
 void main() {
     vec4 color = texture(Sampler0, texCoord0);
-    if (color.a < 0.1) {
+    if (color.a < 0.5) {
         discard;
     }
     color *= vertexColor * ColorModulator;
