@@ -145,6 +145,13 @@ public enum Queue {
         if(commandPool==null) return;
         VK11.vkTrimCommandPool(Vulkan.getDevice(), this.commandPool.id, 0);
     }
+    public static void trimAll()
+    {
+        for(var q : Queue.values())
+        {
+            q.trimCmdPool();
+        }
+    }
     public void fillBuffer(long id, int bufferSize, int qNaN) {
 
         vkCmdFillBuffer(this.getCommandBuffer().getHandle(), id, 0, bufferSize, qNaN);

@@ -111,10 +111,8 @@ public class WorldRenderer {
             });
         }
         addOnAllChangedCallback(Vulkan::waitIdle);
-        addOnAllChangedCallback(Queue.TransferQueue::trimCmdPool);
-        addOnAllChangedCallback(Queue.FakeTransferQueue::trimCmdPool);
-        addOnAllChangedCallback(Queue.GraphicsQueue::trimCmdPool);
-        addOnAllChangedCallback(()-> this.chunkQueue.trim(1024));
+        addOnAllChangedCallback(Queue::trimAll);
+        addOnAllChangedCallback(()-> this.chunkQueue.trim(128));
     }
 
     private void allocateIndirectBuffers() {
