@@ -243,7 +243,7 @@ public class Options {
                         "\n"+
                         "Reduces CPU overhead but increases GPU overhead.\n"+
                         "Enabling it might help in CPU limited systems.\n")),
-                new SwitchOption("Per RenderType AreaBuffers",
+                new SwitchOption("Low VRAM mode",
                         value -> {
                             config.perRenderTypeAreaBuffers = value;
                             Renderer.reload=true;
@@ -251,7 +251,9 @@ public class Options {
                         () -> config.perRenderTypeAreaBuffers).setTooltip(Component.nullToEmpty("""
                         (WARNING: EXPERIMENTAL)
                         
-                        Potentially improves performance of Chunk Rendering
+                        Reduces VRAM usage by up to 40%
+                        May Increase/Decrease FPS: How this effects FPS Depends on GPU architecture
+                        Can boost performance on old Mobile SoCs"
                         
                         Very Architecture specific: May have no effect on some Devices""")),
                 new SwitchOption("Fast Leaves Fix",

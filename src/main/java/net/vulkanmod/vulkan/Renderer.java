@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.vulkanmod.Initializer;
 import net.vulkanmod.render.chunk.AreaUploadManager;
 import net.vulkanmod.render.chunk.TerrainShaderManager;
+import net.vulkanmod.render.chunk.WorldRenderer;
 import net.vulkanmod.render.profiling.Profiler2;
 import net.vulkanmod.vulkan.framebuffer.Framebuffer;
 import net.vulkanmod.vulkan.framebuffer.RenderPass;
@@ -178,8 +179,9 @@ public class Renderer {
         p.pop();
         p.push("Frame_fence");
         if(reload)
-        {   waitIdle();
-            Minecraft.getInstance().levelRenderer.allChanged();
+        {
+            waitIdle();
+            WorldRenderer.getInstance().allChanged();
             reload=false;
         }
 

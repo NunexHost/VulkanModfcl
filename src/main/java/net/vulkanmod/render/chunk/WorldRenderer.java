@@ -77,7 +77,6 @@ public class WorldRenderer {
     private SectionGrid sectionGrid;
 
     private boolean needsUpdate;
-    private final Set<BlockEntity> globalBlockEntities = Sets.newHashSet();
 
     private final TaskDispatcher taskDispatcher;
     private final ResettableQueue<RenderSection> chunkQueue = new ResettableQueue<>();
@@ -483,9 +482,6 @@ public class WorldRenderer {
             }
 
             this.taskDispatcher.clearBatchQueue();
-            synchronized(this.globalBlockEntities) {
-                this.globalBlockEntities.clear();
-            }
 
             this.sectionGrid = new SectionGrid(this.level, this.minecraft.options.getEffectiveRenderDistance());
             this.chunkAreaQueue = new AreaSetQueue(this.sectionGrid.chunkAreaManager.size);
@@ -568,7 +564,7 @@ public class WorldRenderer {
         p.push("draw batches");
 
         final int currentFrame = Renderer.getCurrentFrame();
-        if((!Initializer.CONFIG.fastLeavesFix ? COMPACT_RENDER_TYPES : ALL_RENDER_TYPES).contains(rType)) {
+        if((!Initializer.CONFIG.fastLeavesFix ? COMPACT_RENDER_TYPES : SEMI_COMPACT_RENDER_TYPES).contains(rType)) {
 
             GraphicsPipeline terrainShader = TerrainShaderManager.getTerrainShader(rType);
 
@@ -614,28 +610,6 @@ public class WorldRenderer {
             case TRIPWIRE -> p.pop();
         }
 
-    }
-
-    private static String getLayerName(RenderType renderType) {
-        RenderType solid = RenderType.solid();
-        RenderType cutout = RenderType.cutout();
-        RenderType cutoutMipped = RenderType.cutoutMipped();
-        RenderType translucent = RenderType.translucent();
-        RenderType tripwire = RenderType.tripwire();
-
-        String layerName;
-        if (solid.equals(renderType)) {
-            layerName = "solid";
-        } else if (cutout.equals(renderType)) {
-            layerName = "cutout";
-        } else if (cutoutMipped.equals(renderType)) {
-            layerName = "cutoutMipped";
-        } else if (tripwire.equals(renderType)) {
-            layerName = "tripwire";
-        } else if (translucent.equals(renderType)) {
-            layerName = "translucent";
-        } else layerName = "unk";
-        return layerName;
     }
 
     private void sortTranslucentSections(double camX, double camY, double camZ) {

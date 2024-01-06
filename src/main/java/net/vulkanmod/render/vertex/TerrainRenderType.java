@@ -7,7 +7,7 @@ import net.vulkanmod.vulkan.VRenderSystem;
 import java.util.EnumSet;
 
 public enum TerrainRenderType {
-    SOLID(RenderType.solid(), 2097152 /*BIG_BUFFER_SIZE*/),
+    SOLID(RenderType.solid(), 262144 /*BIG_BUFFER_SIZE*/),
     CUTOUT_MIPPED(RenderType.cutoutMipped(), 131072 /*SMALL_BUFFER_SIZE*/),
     CUTOUT(RenderType.cutout(), 131072 /*SMALL_BUFFER_SIZE*/),
     TRANSLUCENT(RenderType.translucent(), 262144 /*MEDIUM_BUFFER_SIZE*/),
@@ -16,6 +16,7 @@ public enum TerrainRenderType {
     public static final TerrainRenderType[] VALUES = TerrainRenderType.values();
 
     public static final EnumSet<TerrainRenderType> COMPACT_RENDER_TYPES = EnumSet.of(CUTOUT_MIPPED, TRANSLUCENT);
+    public static final EnumSet<TerrainRenderType> SEMI_COMPACT_RENDER_TYPES = EnumSet.of(CUTOUT_MIPPED, CUTOUT, TRANSLUCENT);
     public static final EnumSet<TerrainRenderType> ALL_RENDER_TYPES = EnumSet.allOf(TerrainRenderType.class);
 
 
@@ -29,7 +30,7 @@ public enum TerrainRenderType {
     }
 
     public static EnumSet<TerrainRenderType> getActiveLayers() {
-        return !Initializer.CONFIG.fastLeavesFix ? COMPACT_RENDER_TYPES : ALL_RENDER_TYPES;
+        return !Initializer.CONFIG.fastLeavesFix ? COMPACT_RENDER_TYPES : SEMI_COMPACT_RENDER_TYPES;
     }
 
     public static TerrainRenderType get(String renderType) {

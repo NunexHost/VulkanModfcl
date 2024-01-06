@@ -248,16 +248,15 @@ public abstract class ChunkTask {
 
                 };
             }
-            return renderType;
-//            else {
-//                return  switch (renderType)
-//                {
-//                    case SOLID, CUTOUT_MIPPED -> CUTOUT_MIPPED;
-//                    case CUTOUT -> CUTOUT;
-//                    default -> TRANSLUCENT;
-//
-//                };
-//            }
+            else {
+                return  switch (renderType)
+                {
+                    case SOLID, CUTOUT_MIPPED -> CUTOUT_MIPPED;
+                    case CUTOUT -> CUTOUT;
+                    default -> TRANSLUCENT;
+
+                };
+            }
         }
 
         private <E extends BlockEntity> void handleBlockEntity(CompileResults compileResults, E blockEntity) {
