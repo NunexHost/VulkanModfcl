@@ -11,7 +11,7 @@ layout(binding = 0) uniform UniformBufferObject {
    float LineWidth;
 };
 
-layout(location = 1) out float vertexDistance;
+
 layout(location = 0) out vec4 vertexColor;
 
 const float VIEW_SHRINK = 1.0 - (1.0 / 256.0);
@@ -43,7 +43,7 @@ void main() {
         gl_Position = vec4((ndc1 - vec3(lineOffset, 0.0)) * linePosStart.w, linePosStart.w);
     }
 
-    vertexDistance = length((ModelViewMat * vec4(Position, 1.0)).xyz);
+
     vertexColor = Color;
 }
 

@@ -28,7 +28,7 @@ public class Uniforms {
 
         //Vec1i
         vec1i_uniformMap.put("EndPortalLayers", () -> 15);
-
+        //TODO: Spec Constants...
         //Vec1
         vec1f_uniformMap.put("FogStart", RenderSystem::getShaderFogStart);
         vec1f_uniformMap.put("FogEnd", RenderSystem::getShaderFogEnd);
