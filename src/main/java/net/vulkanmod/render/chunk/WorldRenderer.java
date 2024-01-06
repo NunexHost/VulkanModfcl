@@ -312,7 +312,7 @@ public class WorldRenderer {
     private void updateRenderChunks() {
         int maxDirectionsChanges = Initializer.CONFIG.advCulling;
 
-        int buildLimit = taskDispatcher.getIdleThreadsCount() * (Minecraft.getInstance().options.enableVsync().get() ? 6 : 3);
+        int buildLimit = taskDispatcher.getIdleThreadsCount() * (Initializer.CONFIG.buildLimit);
 
         if(buildLimit == 0)
             this.needsUpdate = true;
@@ -326,7 +326,8 @@ public class WorldRenderer {
                 this.nonEmptyChunks++;
             }
 
-            this.scheduleUpdate(renderSection);
+            if(this.scheduleUpdate(renderSection, buildLimit))
+                buildLimit--;
 
             if(renderSection.directionChanges > maxDirectionsChanges)
                 continue;
@@ -366,7 +367,8 @@ public class WorldRenderer {
                 this.nonEmptyChunks++;
             }
 
-            this.scheduleUpdate(renderSection);
+            if(this.scheduleUpdate(renderSection, rebuildLimit))
+                rebuildLimit--;
 
             for(Direction direction : Util.DIRECTIONS) {
                 RenderSection relativeChunk = renderSection.getNeighbour(direction);
@@ -418,12 +420,16 @@ public class WorldRenderer {
         relativeChunk.directionChanges = d;
     }
 
-    public void scheduleUpdate(RenderSection section) {
+    public boolean scheduleUpdate(RenderSection section, int limit) {
         if(!section.isDirty())
-            return;
+            return false;
+
+        if(limit <= 0)
+            return false;
 
         section.rebuildChunkAsync(this.taskDispatcher, this.renderRegionCache);
         section.setNotDirty();
+        return true;
     }
 
     public void compileSections(Camera camera) {

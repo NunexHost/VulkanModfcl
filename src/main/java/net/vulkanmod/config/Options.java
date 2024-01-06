@@ -271,6 +271,14 @@ public class Options {
                         Recommended to use with "Per RenderType AreaBuffers"
                         
                         Extremely experimental: May Decrease performance, even on Fancy Graphics""")),
+
+                new RangeOption("Chunk Updates", 1, 16, 1,
+                        value -> value == 16 ? "Unlimited" : String.valueOf(value),
+                        value -> config.buildLimit = (value == 16 ? Short.MAX_VALUE : value),
+                        () -> config.buildLimit)
+                        .setTooltip(Component.nullToEmpty("""
+                        Max Chunk Updates per Thread
+                        Reduce to minimize CPU load""")),
                 new CyclingOption<>("Device selector",
                         IntStream.range(-1, DeviceManager.suitableDevices.size()).boxed().toArray(Integer[]::new),
                         value -> Component.nullToEmpty(value == -1 ? "Auto" : DeviceManager.suitableDevices.get(value).deviceName),

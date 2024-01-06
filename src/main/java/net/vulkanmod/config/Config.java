@@ -25,6 +25,7 @@ public class Config {
     public int device = -1;
     public boolean animations = true;
     public boolean renderSky = true;
+    public int buildLimit = 3;
 
     private static Path path;
 
