@@ -321,9 +321,10 @@ public class WorldRenderer {
     private void updateRenderChunks() {
         int maxDirectionsChanges = Initializer.CONFIG.advCulling;
 
-        int buildLimit = taskDispatcher.getIdleThreadsCount() * (Initializer.CONFIG.buildLimit);
+        int idleThreadsCount = taskDispatcher.getIdleThreadsCount();
+        int buildLimit = idleThreadsCount * (Initializer.CONFIG.buildLimit);
 
-        if(buildLimit == 0)
+        if(idleThreadsCount == 0)
             this.needsUpdate = true;
 
         while(this.chunkQueue.hasNext()) {
