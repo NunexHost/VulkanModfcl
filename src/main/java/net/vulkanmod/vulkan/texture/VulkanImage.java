@@ -2,7 +2,6 @@ package net.vulkanmod.vulkan.texture;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import net.vulkanmod.vulkan.*;
-import net.vulkanmod.vulkan.framebuffer.SwapChain;
 import net.vulkanmod.vulkan.memory.MemoryManager;
 import net.vulkanmod.vulkan.memory.StagingBuffer;
 import net.vulkanmod.vulkan.queue.CommandPool;
@@ -140,7 +139,12 @@ public class VulkanImage {
     }
 
     public static int getAspect(int format) {
-        return format == SwapChain.getDefaultDepthFormat() ? VK_IMAGE_ASPECT_DEPTH_BIT : VK_IMAGE_ASPECT_COLOR_BIT;
+        return switch (format)
+        {
+            default -> VK_IMAGE_ASPECT_COLOR_BIT;
+            case VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT ->VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+            case VK_FORMAT_D32_SFLOAT, VK_FORMAT_X8_D24_UNORM_PACK32 ->VK_IMAGE_ASPECT_DEPTH_BIT;
+        };
     }
 
     public static long createImageView(long image, int format, int aspectFlags, int mipLevels) {
@@ -194,7 +198,7 @@ public class VulkanImage {
             Synchronization.INSTANCE.addCommandBuffer(commandBuffer);
     }
 
-    public static void downloadTexture(int width, int height, int formatSize, ByteBuffer buffer, long image) {
+    public static void downloadTexture(int width, int height, int formatSize, ByteBuffer buffer, VulkanImage image) {
         try(MemoryStack stack = stackPush()) {
             long imageSize = width * height * formatSize;
 
@@ -268,11 +272,13 @@ public class VulkanImage {
         }
     }
 
-    private static void copyImageToBuffer(long buffer, long image, int mipLevel, int width, int height, int xOffset, int yOffset, int bufferOffset, int bufferRowLenght, int bufferImageHeight) {
+    private static void copyImageToBuffer(long buffer, VulkanImage image, int mipLevel, int width, int height, int xOffset, int yOffset, int bufferOffset, int bufferRowLenght, int bufferImageHeight) {
 
         try(MemoryStack stack = stackPush()) {
 
             CommandPool.CommandBuffer commandBuffer = DeviceManager.getGraphicsQueue().beginCommands();
+
+            image.transitionImageLayout(stack, commandBuffer.getHandle(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
             VkBufferImageCopy.Buffer region = VkBufferImageCopy.calloc(1, stack);
             region.bufferOffset(bufferOffset);
@@ -285,7 +291,9 @@ public class VulkanImage {
             region.imageOffset().set(xOffset, yOffset, 0);
             region.imageExtent().set(width, height, 1);
 
-            vkCmdCopyImageToBuffer(commandBuffer.getHandle(), image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, buffer, region);
+            vkCmdCopyImageToBuffer(commandBuffer.getHandle(), image.getId(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, buffer, region);
+
+            image.transitionImageLayout(stack, commandBuffer.getHandle(), VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
             long fence = DeviceManager.getGraphicsQueue().submitCommands(commandBuffer);
 
@@ -306,9 +314,13 @@ public class VulkanImage {
         int sourceStage, srcAccessMask, destinationStage, dstAccessMask = 0;
 
         switch (image.currentLayout) {
-            case VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR -> {
+            default -> {
                 srcAccessMask = 0;
                 sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+            }
+            case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL -> {
+                srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+                sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
             }
             case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL -> {
                 srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
@@ -326,10 +338,14 @@ public class VulkanImage {
                 srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
                 sourceStage = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
             }
-            default -> throw new RuntimeException("Unexpected value:" + image.currentLayout);
+//            default -> throw new RuntimeException("Unexpected value:" + image.currentLayout);
         }
 
         switch (newLayout) {
+            case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL -> {
+                dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+                destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+            }
             case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL -> {
                 dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
                 destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
@@ -346,10 +362,10 @@ public class VulkanImage {
                 dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
                 destinationStage = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
             }
-            case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR -> {
+            default -> {
                 destinationStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
             }
-            default -> throw new RuntimeException("Unexpected value:" + newLayout);
+//            default -> throw new RuntimeException("Unexpected value:" + newLayout);
         }
 
         transitionLayout(stack, commandBuffer, image, image.currentLayout, newLayout,
@@ -391,10 +407,6 @@ public class VulkanImage {
                 barrier);
 
         image.currentLayout = newLayout;
-    }
-
-    private static boolean hasStencilComponent(int format) {
-        return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
     }
 
     public void free() {
